@@ -82,7 +82,6 @@ class App:
             # Adjust y-offset to prevent overlaps.
             yOffset += 150
 
-
         pygame.display.flip()
 
 
