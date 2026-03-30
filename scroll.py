@@ -50,6 +50,8 @@ class App:
                 if hitRect.collidepoint(pygame.mouse.get_pos()):
                     if left:
                         node[2] = 1
+                    elif middle:
+                        node[2] = 2
                     elif right:
                         node[2] = 0
             
@@ -76,7 +78,7 @@ class App:
                 if node[2] == 1:
                     pygame.draw.rect(self.screen, (0, 255, 0), pygame.Rect(-1 * self.cameraX- ((nodeSize + 10) / 2) + 80 * node[1], self.cameraY - ((nodeSize + 10) / 2) - yOffset, nodeSize + 10, nodeSize + 10))
 
-                pygame.draw.rect(self.screen, node[0], pygame.Rect(-1 * self.cameraX- (nodeSize / 2) + 80 * node[1], self.cameraY - (nodeSize / 2) - yOffset, nodeSize, nodeSize))
+                pygame.draw.rect(self.screen, node[0] if node[2] != 2 else (255, 255, 255), pygame.Rect(-1 * self.cameraX- (nodeSize / 2) + 80 * node[1], self.cameraY - (nodeSize / 2) - yOffset, nodeSize, nodeSize))
 
 
             # Adjust y-offset to prevent overlaps.
