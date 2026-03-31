@@ -11,7 +11,8 @@ def get_input(question, previousLines = [], minimum = None, maximum = None):
         for line in previousLines:
             print(line)
         
-        print("")
+        if len(previousLines) > 0:
+            print("")
         
         try:
             op = int(input(question))
