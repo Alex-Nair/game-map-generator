@@ -51,13 +51,15 @@ class App:
                     if left:
                         station[2] = 1
                     elif middle:
+                        station[2] = 2
+                    elif right:
+                        station[2] = 0
+                    elif keys[pygame.K_i]:
                         clear_screen()
 
                         print("EVENTS:")
                         for event in station[1]:
                             print(f"- {event}")
-                    elif right:
-                        station[2] = 0
 
 
     def draw(self):
@@ -75,7 +77,7 @@ class App:
         # Now draw all of the stations.
         for layer in range(len(self.stations)):
             for station in self.stations[layer]:
-                pygame.draw.rect(self.screen, (255, 255, 255) if station[2] != 1 else (0, 255, 0), pygame.Rect(station[0] * 150 - self.cameraX - (stationSize / 2), layer * 150 + self.cameraY - (stationSize / 2), stationSize, stationSize))
+                pygame.draw.rect(self.screen, [(0, 0, 0), (0, 255, 0), (255, 255, 255)][station[2]], pygame.Rect(station[0] * 150 - self.cameraX - (stationSize / 2), layer * 150 + self.cameraY - (stationSize / 2), stationSize, stationSize))
                 pygame.draw.rect(self.screen, (100, 100, 100), pygame.Rect(station[0] * 150 - self.cameraX - (stationInsideSize / 2), layer * 150 + self.cameraY - (stationInsideSize / 2), stationInsideSize, stationInsideSize))
         
         pygame.display.flip()
@@ -127,7 +129,11 @@ class App:
             newConsiderations = []
 
             for stationLocation in toConsider:
-                possibleDirections = [[1, 0]] * 5 + [[1, -1], [1, 1]] * 2 + [[0, 1], [0, -1]] # Side-to-side movement should be less likely than downard movement.
+                possibleDirections = [[1, 0]] * 10 + [[1, -1], [1, 1]] * 5
+
+                if stationLocation[0] > 0:
+                    possibleDirections += [[0, 1], [0, -1]] # Side-to-side movement should only be possible after the final station.
+
                 movementAttempts = random.choice([1] * 3 + [2] * 2 + [3])
 
                 connectionsMade = 0
@@ -139,16 +145,16 @@ class App:
 
                     if newPosition[0] > self.distance or abs(newPosition[1]) > self.spread:
                         continue
-
+                    
                     if get_station(newPosition) == None:
                         add_station(newPosition)
                         stationCount += 1
-
                         newConsiderations.append(newPosition)
-                    
+
                     self.connections.append([stationLocation, newPosition])
                     connectionsMade += 1
-            
+
+
             toConsider = newConsiderations.copy()
 
         # Add the last node, which is the start node and connects to every possible node above it.
