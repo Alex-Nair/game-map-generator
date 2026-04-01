@@ -80,7 +80,7 @@ class App:
 
 
     def start(self):
-        # Create dungeon.
+        # Create waypoints.
         startNode = (0, 255, 0)
         bossNode = (255, 0, 0)
 
@@ -89,7 +89,7 @@ class App:
             [(200, 200, 200), 3], # Empty Space
             [(200, 0, 0), 2], # Regular Battles
             [(120, 0, 0), 1], # Elite Battles
-            [(200, 200, 0), 0.5], # Treasures
+            [(200, 200, 0), 0.5], # Treasure
             [(0, 200, 0), 0.5], # Rest Sites
             [(0, 170, 255), 1] # Shops
         ]
