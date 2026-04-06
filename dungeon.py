@@ -130,6 +130,7 @@ class App:
         # Create the node distribution for later.
         maxNodes = self.mainPathLength + self.sidePathCount
         possibleNodes = {}
+        maxNodes *= 3
         totalDistribution = sum(node[1] for node in nodeTypes)
 
         for node in nodeTypes:
@@ -223,19 +224,24 @@ class App:
 
         while self.sidePathCount > 0:
             currentLocation = random.choice(takenSpaces)
-            nextMoves = []
-
-            for adjustment in [[1, 0], [0, 1], [-1, 0], [0, -1]]:
-                cLocation = [currentLocation[0] + adjustment[0], currentLocation[1] + adjustment[1]]
-
-                if not cLocation in takenSpaces:
-                    nextMoves.append(adjustment)
 
             pathLength = 0
+            self.sidePathCount -= 1
+            nextMoves = [None]
 
             while pathLength < self.sidePathMaximumSize and self.sidePathCount > 0 and len(nextMoves) > 0:
-                self.sidePathCount -= 1
+                nextMoves = []
+
+                for adjustment in [[1, 0], [0, 1], [-1, 0], [0, -1]]:
+                    cLocation = [currentLocation[0] + adjustment[0], currentLocation[1] + adjustment[1]]
+
+                    if not cLocation in takenSpaces:
+                        nextMoves.append(adjustment)
+
                 pathLength += 1
+
+                if len(nextMoves) <= 0:
+                    break
     
                 chosenMove = random.choice(nextMoves)
 
@@ -257,7 +263,6 @@ class App:
                 newNode = generate_node(currentLocation, chosenMove)
                 takenSpaces.append(newNode[:2])
 
-                nextMoves = [adjustment for adjustment in [[1, 0], [0, 1], [-1, 0], [0, -1]] if adjustment != chosenMove]
                 currentLocation = newNode[:2]
 
         # Start the actual pygame loop.
